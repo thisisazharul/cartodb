@@ -8,8 +8,8 @@ GIT
 
 GIT
   remote: https://github.com/cartodb/cartodb-common.git
-  revision: 8c86ac330a4c360b6b89da2609bf9216fffbd246
-  tag: v1.0.1
+  revision: 8b3cf28fc7c8970396bf1d6ebe2fc341c19b91a1
+  tag: v1.1.0-dev
   specs:
     cartodb-common (1.0.1)
       argon2 (~> 2)
