@@ -4,12 +4,11 @@ module Carto
 
       include ::LoggerHelper
 
-      def update_map_views(message)
-        map_views_data = message.payload
+      def update_map_views(params = {})
         log_info(message: 'Processing :update_map_views')
 
-        date = map_views_data[:date]
-        users_data = map_views_data[:data]
+        date = params[:date]
+        users_data = params[:data]
 
         users_data.each do |user_data|
           user_id = user_data[:user_id]

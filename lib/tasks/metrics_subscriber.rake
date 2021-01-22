@@ -24,12 +24,16 @@ namespace :message_broker do
       subscription_name = Carto::Common::MessageBroker::Config.instance.metrics_subscription_name
       subscription = message_broker.get_subscription(subscription_name)
 
-      map_views_update = Carto::Subscribers::MapViewsUpdate.new
-
-      subscription.register_callback(
-        'update_map_views', # `event` attribute of the message
-        &map_views_update.method(:update_map_views)
-      )
+      subscription.register_callback(:update_map_views) do |message|
+        begin
+          Carto::Subscribers::MapViewsUpdate.new.update_map_views(message.payload)
+        rescue StandardError => e
+          Rails.logger.error(exception: e)
+          # These messages are not critical, so let's do a manual ACK to avoid saturating the subscription in case of
+          # recurrent failures. This applies also to the dead letter queue.
+          message.ack!
+        end
+      end
 
       at_exit do
         logger.info(message: 'Stopping subscriber...')
